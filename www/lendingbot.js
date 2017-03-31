@@ -247,6 +247,8 @@ function Timespan(name, multiplier) {
             }
             if (currency == "BTC") {
                 return displayUnit.formatValue(earnings) + " <span class=" + currencyClass + ">" + displayUnit.name + "</span> / " + name + "<br/>"
+            } else if (currency == "USD" || currency == "USDT") {
+                return printFloat(earnings, 2) + " <span class=" + currencyClass + ">" + currency + "</span> / "+  name + "<br/>";
             } else {
                 return printFloat(earnings, 8) + " <span class=" + currencyClass + ">" + currency + "</span> / "+  name + "<br/>";
             }
