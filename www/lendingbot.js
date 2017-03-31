@@ -2,11 +2,12 @@
 
 var localFile, reader;
 
-var Hour = new Timespan("Hour",1/24);
-var Day = new Timespan("Day",1);
-var Week = new Timespan("Week",7);
-var Month = new Timespan("Month",30);
-var timespans = [Month, Week, Day, Hour];
+var Hour = new Timespan("Hour", 1/24);
+var Day = new Timespan("Day", 1);
+var Week = new Timespan("Week", 7);
+var Month = new Timespan("Month", 30);
+var Year = new Timespan("Year", 365);
+var timespans = [Year, Month, Week, Day, Hour];
 var summaryCoinRate, summaryCoin;
 var earningsOutputCoinRate, earningsOutputCoin;
 var outputCurrencyDisplayMode = 'all'
