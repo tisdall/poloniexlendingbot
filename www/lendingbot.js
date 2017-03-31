@@ -214,18 +214,18 @@ function handleLocalFile(file) {
 function loadData() {
     if (localFile) {
         reader.readAsText(localFile, 'utf-8');
-        setTimeout('loadData()',30000)
+        setTimeout('loadData()', 10000)
     } else {
         // expect the botlog.json to be in the same folder on the webserver
         var file = 'botlog.json';
         $.getJSON(file, function (data) {
             updateJson(data);
             // reload every 30sec
-            setTimeout('loadData()',30000)
+            setTimeout('loadData()', 10000)
         }).fail( function(d, textStatus, error) {
             $('#status').text("getJSON failed, status: " + textStatus + ", error: "+error);
             // retry after 60sec
-            setTimeout('loadData()',60000)
+            setTimeout('loadData()', 60000)
         });;
     }
 }
