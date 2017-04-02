@@ -81,8 +81,6 @@ function updateRawValues(rawData){
         var maxToLend = parseFloat(rawData[currency]['maxToLend']);
         var highestBidBTC = parseFloat(rawData[currency]['highestBid']);
 
-        totalCoinsOverall += totalCoins
-
         if (currency == 'BTC') {
             // no bids for BTC provided by poloniex
             // this is added so BTC can be handled like other coins for conversions
@@ -186,6 +184,7 @@ function updateRawValues(rawData){
                 }
             }
         }
+        totalCoinsOverall += earningsOutputCoinRate * totalCoins * highestBidBTC;
     }
 
     // add headers
@@ -197,7 +196,7 @@ function updateRawValues(rawData){
     total_cell.innerHTML = "Total holdings";
     total_cell = total_row.appendChild(document.createElement("th"));
     total_cell.setAttribute("colspan", 2);
-    total_cell.innerHTML = totalCoinsOverall;
+    total_cell.innerHTML = prettyFloat(totalCoinsOverall, 2) + " USD";
 
     // show account summary
     if (currencies.length > 1 || summaryCoin != earningsOutputCoin) {
