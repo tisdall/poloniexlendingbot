@@ -70,6 +70,7 @@ function updateRawValues(rawData){
     table.innerHTML = "";
     var currencies = Object.keys(rawData);
     var totalBTCEarnings = {};
+    var totalCoinsOverall = 0;
     for (var keyIndex = 0; keyIndex < currencies.length; ++keyIndex)
     {
         var currency = currencies[keyIndex];
@@ -79,6 +80,9 @@ function updateRawValues(rawData){
         var totalCoins = parseFloat(rawData[currency]['totalCoins']);
         var maxToLend = parseFloat(rawData[currency]['maxToLend']);
         var highestBidBTC = parseFloat(rawData[currency]['highestBid']);
+
+        totalCoinsOverall += totalCoins
+
         if (currency == 'BTC') {
             // no bids for BTC provided by poloniex
             // this is added so BTC can be handled like other coins for conversions
@@ -186,6 +190,14 @@ function updateRawValues(rawData){
 
     // add headers
     var thead = table.createTHead();
+
+    // total
+    var total_row = thead.insertRow(0);
+    var total_cell = total_row.appendChild(document.createElement("th"));
+    total_cell.innerHTML = "Total holdings";
+    total_cell = total_row.appendChild(document.createElement("th"));
+    total_cell.setAttribute("colspan", 2);
+    total_cell.innerHTML = totalCoinsOverall;
 
     // show account summary
     if (currencies.length > 1 || summaryCoin != earningsOutputCoin) {
