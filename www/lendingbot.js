@@ -184,7 +184,7 @@ function updateRawValues(rawData){
                 }
             }
         }
-        totalCoinsOverall += earningsOutputCoinRate * totalCoins * highestBidBTC;
+        totalCoinsOverall += earningsOutputCoinRate * maxToLend * highestBidBTC;
     }
 
     // add headers
