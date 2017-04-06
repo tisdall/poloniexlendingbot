@@ -7,7 +7,8 @@ var Day = new Timespan("Day", 1);
 var Week = new Timespan("Week", 7);
 var Month = new Timespan("Month", 30);
 var Year = new Timespan("Year", 365);
-var timespans = [Year, Month, Week, Day, Hour];
+var refreshRate = 10;
+var timespans = [];
 var summaryCoinRate, summaryCoin;
 var earningsOutputCoinRate, earningsOutputCoin;
 var outputCurrencyDisplayMode = 'all'
@@ -184,19 +185,10 @@ function updateRawValues(rawData){
                 }
             }
         }
-        totalCoinsOverall += earningsOutputCoinRate * maxToLend * highestBidBTC;
     }
 
     // add headers
     var thead = table.createTHead();
-
-    // total
-    var total_row = thead.insertRow(0);
-    var total_cell = total_row.appendChild(document.createElement("th"));
-    total_cell.innerHTML = "Total holdings";
-    total_cell = total_row.appendChild(document.createElement("th"));
-    total_cell.setAttribute("colspan", 2);
-    total_cell.innerHTML = prettyFloat(totalCoinsOverall, 2) + " USD";
 
     // show account summary
     if (currencies.length > 1 || summaryCoin != earningsOutputCoin) {
@@ -226,14 +218,14 @@ function handleLocalFile(file) {
 function loadData() {
     if (localFile) {
         reader.readAsText(localFile, 'utf-8');
-        setTimeout('loadData()', 10000)
+        setTimeout('loadData()', refreshRate * 1000)
     } else {
         // expect the botlog.json to be in the same folder on the webserver
         var file = 'botlog.json';
         $.getJSON(file, function (data) {
             updateJson(data);
             // reload every 30sec
-            setTimeout('loadData()', 10000)
+            setTimeout('loadData()', refreshRate * 1000)
         }).fail( function(d, textStatus, error) {
             $('#status').text("getJSON failed, status: " + textStatus + ", error: "+error);
             // retry after 60sec
@@ -342,7 +334,44 @@ function setOutputCurrencyDisplayMode() {
 
 }
 
-$(document).ready(function () {
+function loadSave() {
+    // Refresh rate
+    refreshRate = localStorage.getItem('refreshRate') || 10
+    $('#refresh_interval').val(refreshRate)
+
+    // Time spans
+    var timespanNames = JSON.parse(localStorage.getItem('timespanNames')) || ["Year", "Month", "Week", "Day", "Hour"]
+
+    timespans = [Year, Month, Week, Day, Hour].filter(function(t) {
+        // filters out timespans not specified
+        return timespanNames.indexOf(t.name) !== -1;
+    });
+
+    timespanNames.forEach(function(t) {
+        $('input[data-timespan="' + t + '"]').prop('checked', true);
+    });
+}
+
+function doSave() {
+    // Refresh rate
+    localStorage.setItem('refreshRate', $('#refresh_interval').val())
+
+    // Time spans
+    var timespanNames = [];
+    $('input[type="checkbox"]:checked').each(function(i, c){
+        timespanNames.push($(c).attr('data-timespan'));
+    });
+    localStorage.setItem('timespanNames', JSON.stringify(timespanNames))
+
+    toastr.success("Settings saved!");
+    $('#settings_modal').modal('hide');
+
+    // Now we actually *use* these settings!
+    init();
+}
+
+function init() {
+    loadSave();
     setEffRateMode();
     setBTCDisplayUnit();
     setOutputCurrencyDisplayMode();
@@ -350,4 +379,12 @@ $(document).ready(function () {
     if (window.location.protocol == "file:") {
         $('#file').show();
     }
+}
+
+$(document).ready(function () {
+    toastr.options = {
+        "positionClass": "toast-top-center"
+    }
+
+    init();
 });

@@ -33,6 +33,10 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+    <!-- toastr -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
     <script src="lendingbot.js" ></script>
 
     <style>
@@ -67,8 +71,9 @@
                         Poloniex Lending Bot
                     </h4>
                 </div>
-                <div class="col-xs-5" style="text-align:right;margin: 10px auto;" >
+                <div class="col-xs-5" style="text-align:right; margin: 10px auto;" >
                     <span id="updated">Not updated</span>
+                    <i class="glyphicon glyphicon-cog" data-toggle="modal" data-target="#settings_modal" style="color: orangered; cursor: pointer;"></i>
                 </div>
             </div>
         </div>
@@ -93,14 +98,67 @@
                         <th colspan="2">Log (Reversed ordered):</th>
                     </tr>
                 </thead>
-                <tbody id="logtable">                   
+                <tbody id="logtable">
                 </tbody>
             </table>
         </div>
     </div>
     <!-- /.container -->
-    
 
+
+    <div class="modal fade" id="settings_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Refresh interval (in seconds)</label>
+                            <input type="number" class="form-control" id="refresh_interval" placeholder="10">
+                            <p class="help-block">(10-60)</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Date ranges to display earnings for</label>
+
+                            <div class="checkbox" style="margin-top: 0;">
+                                <label>
+                                    <input data-timespan="Hour" type="checkbox"> Hourly
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input data-timespan="Day" type="checkbox"> Daily
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input data-timespan="Week" type="checkbox"> Weekly
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input data-timespan="Month" type="checkbox"> Monthly
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input data-timespan="Year" type="checkbox"> Yearly
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="doSave()">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 
 </html>
