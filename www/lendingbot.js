@@ -71,7 +71,6 @@ function updateRawValues(rawData){
     table.innerHTML = "";
     var currencies = Object.keys(rawData);
     var totalBTCEarnings = {};
-    var totalCoinsOverall = 0;
     for (var keyIndex = 0; keyIndex < currencies.length; ++keyIndex)
     {
         var currency = currencies[keyIndex];
