@@ -369,7 +369,7 @@ function doSave() {
     init();
 }
 
-function init() {
+function update() {
     loadSave();
     setEffRateMode();
     setBTCDisplayUnit();
@@ -385,5 +385,5 @@ $(document).ready(function () {
         "positionClass": "toast-top-center"
     }
 
-    init();
+    update();
 });
