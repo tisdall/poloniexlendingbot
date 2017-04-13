@@ -366,7 +366,7 @@ function doSave() {
     $('#settings_modal').modal('hide');
 
     // Now we actually *use* these settings!
-    init();
+    update();
 }
 
 function update() {
