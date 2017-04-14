@@ -40,23 +40,25 @@
     <script src="lendingbot.js" ></script>
 
     <style>
-        body {
-		padding-top: 50px;
-	}
-        .inlinediv {
-		display: inline-block;
-		padding-right: 5%;
-		vertical-align: top;
-	}
-	.plb-tooltip {
-		white-space: nowrap;
-		text-decoration: none;
-		border-bottom: 1px dotted;
-		color: black;
-	}
-	.plb-tooltip:hover {
-		text-decoration: none;
-	}
+    .brand-margin{
+        margin-top:4px;
+        margin-bottom:4px
+    }
+
+    .inlinediv {
+        display: inline-block;
+        padding-right: 5%;
+        vertical-align: top;
+    }
+    .plb-tooltip {
+        white-space: nowrap;
+        text-decoration: none;
+        border-bottom: 1px dotted;
+        color: black;
+    }
+    .plb-tooltip:hover {
+        text-decoration: none;
+    }
     </style>
 
 </head>
@@ -65,20 +67,34 @@
     <!-- Page Content -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-            <div class="row">
-                <div class="col-xs-7">
-                    <h4>
-                        Poloniex Lending Bot
-                    </h4>
+
+                <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header" style="margin-left:8px">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="images/icon32.png" height="32" width="32" style="margin-top: 8px;margin-right: 8px;margin-left: -15px;vertical-align:top">
+                <div style="display:inline-block">
+                    <h4 class="brand-margin">Poloniex Lending Bot</h4>
+                    <h7 class="brand-margin" id="updated">Not updated</h7>
                 </div>
-                <div class="col-xs-5" style="text-align:right; margin: 10px auto;" >
-                    <span id="updated">Not updated</span>
-                    <i class="glyphicon glyphicon-cog" data-toggle="modal" data-target="#settings_modal" style="color: orangered; cursor: pointer;"></i>
-                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a data-toggle="modal" data-target="#settings_modal">
+                        <i class="glyphicon glyphicon-cog" style="color: black; cursor: pointer;"></i>
+                        Settings
+                    </a></li>
+                </ul>
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="container" style="padding-top:50px">
         <div class="row" style="overflow-x:auto">
             <div id="file" style="margin-top:8px;display:none" >Select log file: <input type="file" name="file" style="display:inline-block" onchange="handleLocalFile(this.files[0])" /></div>
             <table class="table table-responsive">
@@ -117,12 +133,12 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="exampleInputFile">Refresh interval (in seconds)</label>
+                            <label>Refresh interval (in seconds)</label>
                             <input type="number" class="form-control" id="refresh_interval" placeholder="10">
                             <p class="help-block">(10-60)</p>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFile">Date ranges to display earnings for</label>
+                            <label>Date ranges to display earnings for</label>
 
                             <div class="checkbox" style="margin-top: 0;">
                                 <label>
