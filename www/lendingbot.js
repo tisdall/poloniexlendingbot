@@ -14,6 +14,7 @@ var earningsOutputCoinRate, earningsOutputCoin;
 var outputCurrencyDisplayMode = 'all'
 var validOutputCurrencyDisplayModes = ['all', 'summary'];
 var effRateMode = 'lentperc';
+var validEffRateModes = ['lentperc', 'onlyfee'];
 
 // BTC DisplayUnit
 var BTC = new BTCDisplayUnit("BTC", 1);
@@ -270,7 +271,6 @@ function BTCDisplayUnit(name, multiplier) {
 }
 
 function setEffRateMode() {
-    var validModes = ['lentperc', 'onlyfee'];
     var q = location.search.match(/[\?&]effrate=[^&]+/);
 
     if (q) {
@@ -282,11 +282,12 @@ function setEffRateMode() {
             effRateMode = localStorage.effRateMode;
         }
     }
-    if (validModes.indexOf(effRateMode) == -1) {
+    if (validEffRateModes.indexOf(effRateMode) == -1) {
         console.error(effRateMode + ' is not valid effective rate mode! Valid values are ' + validModes);
-        effRateMode = validModes[0];
+        effRateMode = validEffRateModes[0];
     }
     localStorage.effRateMode = effRateMode;
+    $("input[name='effRateMode'][value='"+ effRateMode +"']").prop('checked', true);;
     console.log('Effective rate mode: ' + effRateMode);
 }
 
@@ -388,6 +389,14 @@ function doSave() {
     validOutputCurrencyDisplayModes.forEach(function(mode) {
         if(mode == localStorage.outputCurrencyDisplayModeText) {
             outputCurrencyDisplayMode = mode;
+        }
+    })
+
+    //Effective rate calculation
+    localStorage.effRateMode = $('input[name="effRateMode"]:checked').val();
+    validEffRateModes.forEach(function(mode) {
+        if(mode == localStorage.effRateMode) {
+            effRateMode = mode;
         }
     })
 

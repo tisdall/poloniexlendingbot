@@ -59,6 +59,10 @@
     .plb-tooltip:hover {
         text-decoration: none;
     }
+
+    .modal-body form label {
+        margin-top:8px;
+    }
     </style>
 
 </head>
@@ -132,7 +136,7 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <label>Refresh interval (10-60 seconds)</label>
+                        <label>Page Refresh interval (10-60 seconds)</label>
                         <div class="form-group">
                             <input type="number" class="form-control" id="refresh_interval" placeholder="(10-60)">
                         </div>
@@ -182,6 +186,18 @@
                             </div>
                             <div class="radio-inline">
                                 <input value="summary" type="radio" name="outputCurrencyDisplayMode"> Only Summary
+                            </div>
+                        </div>
+
+                        <label>Effective loan rates calculation</label>
+                        <p class="small">Effective rate can either take into consideration the actual amount actively lent OR consider only Poloniex 15% fee</p>
+                        <div class="form-group">
+
+                            <div class="radio-inline" style="margin-top: 0;">
+                                <input value="lentperc" type="radio" name="effRateMode"> Fee and Effective Lent
+                            </div>
+                            <div class="radio-inline">
+                                <input value="onlyfee" type="radio" name="effRateMode"> Fee Only
                             </div>
                         </div>
 
