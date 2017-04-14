@@ -7,7 +7,7 @@ var Day = new Timespan("Day", 1);
 var Week = new Timespan("Week", 7);
 var Month = new Timespan("Month", 30);
 var Year = new Timespan("Year", 365);
-var refreshRate = 10;
+var refreshRate = 30;
 var timespans = [];
 var summaryCoinRate, summaryCoin;
 var earningsOutputCoinRate, earningsOutputCoin;
@@ -335,7 +335,7 @@ function setOutputCurrencyDisplayMode() {
 
 function loadSave() {
     // Refresh rate
-    refreshRate = localStorage.getItem('refreshRate') || 10
+    refreshRate = localStorage.getItem('refreshRate') || 30
     $('#refresh_interval').val(refreshRate)
 
     // Time spans
