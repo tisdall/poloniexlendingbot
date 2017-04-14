@@ -132,40 +132,48 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <label>Refresh interval (10-60 seconds)</label>
                         <div class="form-group">
-                            <label>Refresh interval (in seconds)</label>
-                            <input type="number" class="form-control" id="refresh_interval" placeholder="10">
-                            <p class="help-block">(10-60)</p>
+                            <input type="number" class="form-control" id="refresh_interval" placeholder="(10-60)">
                         </div>
-                        <div class="form-group">
-                            <label>Date ranges to display earnings for</label>
 
-                            <div class="checkbox" style="margin-top: 0;">
-                                <label>
-                                    <input data-timespan="Hour" type="checkbox"> Hourly
-                                </label>
+                        <label>Date ranges to display earnings for</label>
+                        <div class="form-group">
+
+                            <div class="checkbox-inline" style="margin-top: 0;">
+                                <input data-timespan="Hour" type="checkbox"> Hourly
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input data-timespan="Day" type="checkbox"> Daily
-                                </label>
+                            <div class="checkbox-inline">
+                                <input data-timespan="Day" type="checkbox"> Daily
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input data-timespan="Week" type="checkbox"> Weekly
-                                </label>
+                            <div class="checkbox-inline">
+                                <input data-timespan="Week" type="checkbox"> Weekly
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input data-timespan="Month" type="checkbox"> Monthly
-                                </label>
+                            <div class="checkbox-inline">
+                                <input data-timespan="Month" type="checkbox"> Monthly
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input data-timespan="Year" type="checkbox"> Yearly
-                                </label>
+                            <div class="checkbox-inline">
+                                <input data-timespan="Year" type="checkbox"> Yearly
                             </div>
                         </div>
+
+                        <label>Bitcoin Display Unit</label>
+                        <div class="form-group">
+
+                            <div class="radio-inline" style="margin-top: 0;">
+                                <input value="BTC" type="radio" name="btcDisplayUnit"> BTC
+                            </div>
+                            <div class="radio-inline">
+                                <input value="mBTC" type="radio" name="btcDisplayUnit"> mBTC
+                            </div>
+                            <div class="radio-inline">
+                                <input value="Bits" type="radio" name="btcDisplayUnit"> Bits
+                            </div>
+                            <div class="radio-inline">
+                                <input value="Satoshi" type="radio" name="btcDisplayUnit"> Satoshi
+                            </div>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">

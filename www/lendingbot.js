@@ -20,6 +20,7 @@ var mBTC = new BTCDisplayUnit("mBTC", 1000);
 var Bits = new BTCDisplayUnit("Bits", 1000000);
 var Satoshi = new BTCDisplayUnit("Satoshi", 100000000);
 var displayUnit = BTC;
+var btcDisplayUnitsModes = [BTC, mBTC, Bits, Satoshi];
 
 function updateJson(data) {
     $('#status').text(data.last_status);
@@ -289,9 +290,8 @@ function setEffRateMode() {
 }
 
 function setBTCDisplayUnit() {
-    var validModes = [BTC, mBTC, Bits, Satoshi];
     var q = location.search.match(/[\?&]displayUnit=[^&]+/);
-    var displayUnitText;
+    var displayUnitText = 'BTC';
 
     if (q) {
         //console.log('Got displayUnitText from URI');
@@ -302,7 +302,10 @@ function setBTCDisplayUnit() {
             displayUnitText = localStorage.displayUnitText;
         }
     }
-    validModes.forEach(function(unit) {
+
+    $("input[name='btcDisplayUnit'][value='"+ displayUnitText +"']").prop('checked', true);;
+
+    btcDisplayUnitsModes.forEach(function(unit) {
         if(unit.name == displayUnitText) {
             displayUnit = unit;
             localStorage.displayUnitText = displayUnitText;
@@ -359,7 +362,6 @@ function doSave() {
         return false
     }
 
-
     // Refresh rate
     localStorage.setItem('refreshRate', tempRefreshRate)
 
@@ -369,6 +371,14 @@ function doSave() {
         timespanNames.push($(c).attr('data-timespan'));
     });
     localStorage.setItem('timespanNames', JSON.stringify(timespanNames))
+
+    // Bitcoin Display Unit
+    localStorage.displayUnitText = $('input[name="btcDisplayUnit"]:checked').val();
+    btcDisplayUnitsModes.forEach(function(unit) {
+        if(unit.name == localStorage.displayUnitText) {
+            displayUnit = unit;
+        }
+    })
 
     toastr.success("Settings saved!");
     $('#settings_modal').modal('hide');
