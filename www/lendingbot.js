@@ -352,8 +352,16 @@ function loadSave() {
 }
 
 function doSave() {
+    // Validation
+    var tempRefreshRate = $('#refresh_interval').val()
+    if(tempRefreshRate < 10 || tempRefreshRate > 60) {
+        alert('Please input a value between 10 and 60 for refresh rate')
+        return false
+    }
+
+
     // Refresh rate
-    localStorage.setItem('refreshRate', $('#refresh_interval').val())
+    localStorage.setItem('refreshRate', tempRefreshRate)
 
     // Time spans
     var timespanNames = [];
