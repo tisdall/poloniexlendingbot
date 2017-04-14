@@ -333,7 +333,7 @@ function setOutputCurrencyDisplayMode() {
 
 }
 
-function loadSave() {
+function loadSettings() {
     // Refresh rate
     refreshRate = localStorage.getItem('refreshRate') || 30
     $('#refresh_interval').val(refreshRate)
@@ -378,7 +378,7 @@ function doSave() {
 }
 
 function update() {
-    loadSave();
+    loadSettings();
     setEffRateMode();
     setBTCDisplayUnit();
     setOutputCurrencyDisplayMode();
