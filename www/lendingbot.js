@@ -12,6 +12,7 @@ var timespans = [];
 var summaryCoinRate, summaryCoin;
 var earningsOutputCoinRate, earningsOutputCoin;
 var outputCurrencyDisplayMode = 'all'
+var validOutputCurrencyDisplayModes = ['all', 'summary'];
 var effRateMode = 'lentperc';
 
 // BTC DisplayUnit
@@ -315,9 +316,8 @@ function setBTCDisplayUnit() {
 }
 
 function setOutputCurrencyDisplayMode() {
-    var validModes = ['all', 'summary'];
     var q = location.search.match(/[\?&]earningsInOutputCurrency=[^&]+/);
-    var outputCurrencyDisplayModeText;
+    var outputCurrencyDisplayModeText = 'all';
 
     if (q) {
         outputCurrencyDisplayModeText = q[0].split('=')[1];
@@ -326,7 +326,10 @@ function setOutputCurrencyDisplayMode() {
             outputCurrencyDisplayModeText = localStorage.outputCurrencyDisplayModeText;
         }
     }
-    validModes.forEach(function(mode) {
+
+    $("input[name='outputCurrencyDisplayMode'][value='"+ outputCurrencyDisplayModeText +"']").prop('checked', true);;
+
+    validOutputCurrencyDisplayModes.forEach(function(mode) {
         if(mode == outputCurrencyDisplayModeText) {
             outputCurrencyDisplayMode = mode;
             localStorage.outputCurrencyDisplayModeText = outputCurrencyDisplayModeText;
@@ -377,6 +380,14 @@ function doSave() {
     btcDisplayUnitsModes.forEach(function(unit) {
         if(unit.name == localStorage.displayUnitText) {
             displayUnit = unit;
+        }
+    })
+
+    // OutputCurrencyDisplayMode
+    localStorage.outputCurrencyDisplayModeText = $('input[name="outputCurrencyDisplayMode"]:checked').val();
+    validOutputCurrencyDisplayModes.forEach(function(mode) {
+        if(mode == localStorage.outputCurrencyDisplayModeText) {
+            outputCurrencyDisplayMode = mode;
         }
     })
 
