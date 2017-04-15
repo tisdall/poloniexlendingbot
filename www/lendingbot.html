@@ -40,29 +40,29 @@
     <script src="lendingbot.js?version=1" ></script>
 
     <style>
-    .brand-margin{
-        margin-top:4px;
-        margin-bottom:4px
-    }
+        .brand-margin{
+            margin-top:4px;
+            margin-bottom:4px
+        }
 
-    .inlinediv {
-        display: inline-block;
-        padding-right: 5%;
-        vertical-align: top;
-    }
-    .plb-tooltip {
-        white-space: nowrap;
-        text-decoration: none;
-        border-bottom: 1px dotted;
-        color: black;
-    }
-    .plb-tooltip:hover {
-        text-decoration: none;
-    }
+        .inlinediv {
+            display: inline-block;
+            padding-right: 5%;
+            vertical-align: top;
+        }
+        .plb-tooltip {
+            white-space: nowrap;
+            text-decoration: none;
+            border-bottom: 1px dotted;
+            color: black;
+        }
+        .plb-tooltip:hover {
+            text-decoration: none;
+        }
 
-    .modal-body form label {
-        margin-top:8px;
-    }
+        .modal-body form label {
+            margin-top:8px;
+        }
     </style>
 
 </head>
@@ -90,10 +90,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a data-toggle="modal" data-target="#settings_modal">
+                    <li>
+                        <a data-toggle="modal" data-target="#settings_modal">
                         <i class="glyphicon glyphicon-cog" style="color: black; cursor: pointer;"></i>
                         Settings
-                    </a></li>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -131,7 +133,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <h4 class="modal-title">Settings</h4>
                 </div>
                 <div class="modal-body">
