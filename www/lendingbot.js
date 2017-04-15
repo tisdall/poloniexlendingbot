@@ -7,12 +7,14 @@ var Day = new Timespan("Day", 1);
 var Week = new Timespan("Week", 7);
 var Month = new Timespan("Month", 30);
 var Year = new Timespan("Year", 365);
-var refreshRate = 10;
+var refreshRate = 30;
 var timespans = [];
 var summaryCoinRate, summaryCoin;
 var earningsOutputCoinRate, earningsOutputCoin;
 var outputCurrencyDisplayMode = 'all'
+var validOutputCurrencyDisplayModes = ['all', 'summary'];
 var effRateMode = 'lentperc';
+var validEffRateModes = ['lentperc', 'onlyfee'];
 
 // BTC DisplayUnit
 var BTC = new BTCDisplayUnit("BTC", 1);
@@ -20,6 +22,7 @@ var mBTC = new BTCDisplayUnit("mBTC", 1000);
 var Bits = new BTCDisplayUnit("Bits", 1000000);
 var Satoshi = new BTCDisplayUnit("Satoshi", 100000000);
 var displayUnit = BTC;
+var btcDisplayUnitsModes = [BTC, mBTC, Bits, Satoshi];
 
 function updateJson(data) {
     $('#status').text(data.last_status);
@@ -250,7 +253,7 @@ function Timespan(name, multiplier) {
             if (currency == "BTC") {
                 return displayUnit.formatValue(earnings) + " <span class=" + currencyClass + ">" + displayUnit.name + "</span> / " + name + "<br/>"
             } else if (currency == "USD" || currency == "USDT" || currency == "EUR") {
-                return printFloat(earnings, 2) + " <span class=" + currencyClass + ">" + currency + "</span> / "+  name + "<br/>";
+                return prettyFloat(earnings, 2) + " <span class=" + currencyClass + ">" + currency + "</span> / "+  name + "<br/>";
             } else {
                 return printFloat(earnings, 8) + " <span class=" + currencyClass + ">" + currency + "</span> / "+  name + "<br/>";
             }
@@ -268,7 +271,6 @@ function BTCDisplayUnit(name, multiplier) {
 }
 
 function setEffRateMode() {
-    var validModes = ['lentperc', 'onlyfee'];
     var q = location.search.match(/[\?&]effrate=[^&]+/);
 
     if (q) {
@@ -280,18 +282,18 @@ function setEffRateMode() {
             effRateMode = localStorage.effRateMode;
         }
     }
-    if (validModes.indexOf(effRateMode) == -1) {
+    if (validEffRateModes.indexOf(effRateMode) == -1) {
         console.error(effRateMode + ' is not valid effective rate mode! Valid values are ' + validModes);
-        effRateMode = validModes[0];
+        effRateMode = validEffRateModes[0];
     }
     localStorage.effRateMode = effRateMode;
+    $("input[name='effRateMode'][value='"+ effRateMode +"']").prop('checked', true);;
     console.log('Effective rate mode: ' + effRateMode);
 }
 
 function setBTCDisplayUnit() {
-    var validModes = [BTC, mBTC, Bits, Satoshi];
     var q = location.search.match(/[\?&]displayUnit=[^&]+/);
-    var displayUnitText;
+    var displayUnitText = 'BTC';
 
     if (q) {
         //console.log('Got displayUnitText from URI');
@@ -302,7 +304,10 @@ function setBTCDisplayUnit() {
             displayUnitText = localStorage.displayUnitText;
         }
     }
-    validModes.forEach(function(unit) {
+
+    $("input[name='btcDisplayUnit'][value='"+ displayUnitText +"']").prop('checked', true);;
+
+    btcDisplayUnitsModes.forEach(function(unit) {
         if(unit.name == displayUnitText) {
             displayUnit = unit;
             localStorage.displayUnitText = displayUnitText;
@@ -312,9 +317,8 @@ function setBTCDisplayUnit() {
 }
 
 function setOutputCurrencyDisplayMode() {
-    var validModes = ['all', 'summary'];
     var q = location.search.match(/[\?&]earningsInOutputCurrency=[^&]+/);
-    var outputCurrencyDisplayModeText;
+    var outputCurrencyDisplayModeText = 'all';
 
     if (q) {
         outputCurrencyDisplayModeText = q[0].split('=')[1];
@@ -323,7 +327,10 @@ function setOutputCurrencyDisplayMode() {
             outputCurrencyDisplayModeText = localStorage.outputCurrencyDisplayModeText;
         }
     }
-    validModes.forEach(function(mode) {
+
+    $("input[name='outputCurrencyDisplayMode'][value='"+ outputCurrencyDisplayModeText +"']").prop('checked', true);;
+
+    validOutputCurrencyDisplayModes.forEach(function(mode) {
         if(mode == outputCurrencyDisplayModeText) {
             outputCurrencyDisplayMode = mode;
             localStorage.outputCurrencyDisplayModeText = outputCurrencyDisplayModeText;
@@ -333,9 +340,9 @@ function setOutputCurrencyDisplayMode() {
 
 }
 
-function loadSave() {
+function loadSettings() {
     // Refresh rate
-    refreshRate = localStorage.getItem('refreshRate') || 10
+    refreshRate = localStorage.getItem('refreshRate') || 30
     $('#refresh_interval').val(refreshRate)
 
     // Time spans
@@ -359,7 +366,6 @@ function doSave() {
         return false
     }
 
-
     // Refresh rate
     localStorage.setItem('refreshRate', tempRefreshRate)
 
@@ -370,6 +376,26 @@ function doSave() {
     });
     localStorage.setItem('timespanNames', JSON.stringify(timespanNames))
 
+    // Bitcoin Display Unit
+    localStorage.displayUnitText = $('input[name="btcDisplayUnit"]:checked').val();
+    btcDisplayUnitsModes.forEach(function(unit) {
+        if(unit.name == localStorage.displayUnitText) {
+            displayUnit = unit;
+        }
+    })
+
+    // OutputCurrencyDisplayMode
+    localStorage.outputCurrencyDisplayModeText = $('input[name="outputCurrencyDisplayMode"]:checked').val();
+    if(validOutputCurrencyDisplayModes.indexOf(localStorage.outputCurrencyDisplayModeText) !== -1) {
+        outputCurrencyDisplayMode = localStorage.outputCurrencyDisplayModeText;
+    }
+    
+    //Effective rate calculation
+    localStorage.effRateMode = $('input[name="effRateMode"]:checked').val();
+    if(validEffRateModes.indexOf(localStorage.effRateMode) !== -1) {
+        effRateMode = localStorage.effRateMode;
+    }
+
     toastr.success("Settings saved!");
     $('#settings_modal').modal('hide');
 
@@ -378,7 +404,7 @@ function doSave() {
 }
 
 function update() {
-    loadSave();
+    loadSettings();
     setEffRateMode();
     setBTCDisplayUnit();
     setOutputCurrencyDisplayMode();
