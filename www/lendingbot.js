@@ -378,9 +378,11 @@ function doSave() {
 
     // Bitcoin Display Unit
     localStorage.displayUnitText = $('input[name="btcDisplayUnit"]:checked').val();
-    if(btcDisplayUnitsModes.indexOf(localStorage.displayUnitText) !== -1) {
-        displayUnit = localStorage.displayUnitText;
-    }
+    btcDisplayUnitsModes.forEach(function(unit) {
+        if(unit.name == localStorage.displayUnitText) {
+            displayUnit = unit;
+        }
+    })
 
     // OutputCurrencyDisplayMode
     localStorage.outputCurrencyDisplayModeText = $('input[name="outputCurrencyDisplayMode"]:checked').val();
