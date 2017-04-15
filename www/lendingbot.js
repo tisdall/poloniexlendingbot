@@ -378,27 +378,21 @@ function doSave() {
 
     // Bitcoin Display Unit
     localStorage.displayUnitText = $('input[name="btcDisplayUnit"]:checked').val();
-    btcDisplayUnitsModes.forEach(function(unit) {
-        if(unit.name == localStorage.displayUnitText) {
-            displayUnit = unit;
-        }
-    })
+    if(btcDisplayUnitsModes.indexOf(localStorage.displayUnitText) !== -1) {
+        displayUnit = localStorage.displayUnitText;
+    }
 
     // OutputCurrencyDisplayMode
     localStorage.outputCurrencyDisplayModeText = $('input[name="outputCurrencyDisplayMode"]:checked').val();
-    validOutputCurrencyDisplayModes.forEach(function(mode) {
-        if(mode == localStorage.outputCurrencyDisplayModeText) {
-            outputCurrencyDisplayMode = mode;
-        }
-    })
-
+    if(validOutputCurrencyDisplayModes.indexOf(localStorage.outputCurrencyDisplayModeText) !== -1) {
+        outputCurrencyDisplayMode = localStorage.outputCurrencyDisplayModeText;
+    }
+    
     //Effective rate calculation
     localStorage.effRateMode = $('input[name="effRateMode"]:checked').val();
-    validEffRateModes.forEach(function(mode) {
-        if(mode == localStorage.effRateMode) {
-            effRateMode = mode;
-        }
-    })
+    if(validEffRateModes.indexOf(localStorage.effRateMode) !== -1) {
+        effRateMode = localStorage.effRateMode;
+    }
 
     toastr.success("Settings saved!");
     $('#settings_modal').modal('hide');
