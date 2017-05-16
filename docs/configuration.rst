@@ -76,6 +76,20 @@ If ``spreadlend = 1`` and ``gapbottom = 0``, it will behave as simple lending bo
     - The loans are distributed evenly between gapbottom and gaptop.
     - This allows the bot to benefit from spikes in lending rate but can result in loan fragmentation (not really a bad thing since the bot has to deal with it.)
 
+- ``rawgapbottom`` is how far into the lending book (in BTC) the bot will go, to start spreading loans.
+
+    - Default value: Commented out
+    - Allowed range: 0+
+    - Since the value is in BTC, it will be converted for each altcoin individually.
+
+- ``rawgaptop`` is how far into the lending book (in BTC) the bot will go to stop spreading loans.
+
+    - Default value: Commented out
+    - Allowed range: 0+
+    - Since the value is in BTC, it will be converted for each altcoin individually.
+
+    .. note:: Having both rawgap___ settings uncommented will enable them, recomment them to disable them.
+
 - ``gapbottom`` is how far into the lending book (in percent of YOUR total balance for the respective coin) the bot will go, to start spreading loans.
 
     - Default value: 10 percent

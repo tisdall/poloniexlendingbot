@@ -27,6 +27,9 @@ spreadlend = 3
 #before placing the first (gapbottom) and last (gaptop) offer.
 #If gapbottom is set to 0, the first offer will be at the lowest possible rate.
 #However some low value is recommended (say 10%) to skip dust offers.
+# Picking a raw value (in BTC) will override the other calculated values. Comment them out to return to normal.
+#rawgapbottom = 0.5
+#rawgaptop = 1
 gapbottom = 10
 gaptop = 200
 
