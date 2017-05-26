@@ -163,5 +163,5 @@ def get_notification_config():
 def get_plugins_config():
     active_plugins = []
     if config.has_option("BOT", "plugins"):
-        active_plugins = config.get("BOT", "plugins").split(',')
+        active_plugins = map(str.strip, config.get("BOT", "plugins").split(','))
     return active_plugins

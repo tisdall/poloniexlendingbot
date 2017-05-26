@@ -307,7 +307,7 @@ AccountStats Plugin
 ~~~~~~~~~~~~~~~~~~~
 
 The AccountStats plugin fetches all your loan history and provides statistics based on it.
-Current implementation sends a earnings summery Notification (see Notifications sections) every 24hr.
+Current implementation sends a earnings summary Notification (see Notifications sections) every 24hr.
 
 To enable the plugin add ``AccountStats`` to the ``plugins`` config options, example::
 
