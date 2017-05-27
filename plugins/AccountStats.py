@@ -1,6 +1,4 @@
 # coding=utf-8
-from datetime import date
-
 from plugins.Plugin import Plugin
 import modules.Poloniex as Poloniex
 import sqlite3

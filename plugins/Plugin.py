@@ -1,7 +1,4 @@
 # coding=utf-8
-import modules.Logger
-import modules.Configuration
-import modules.Poloniex
 
 
 class Plugin(object):
