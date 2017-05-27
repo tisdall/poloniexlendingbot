@@ -31,7 +31,7 @@ def init(cfg, api1, log1, notify_conf1):
     log = log1
     notify_conf = notify_conf1
 
-    plugin_names = config.get_plugins_config();
+    plugin_names = config.get_plugins_config()
     for plugin_name in plugin_names:
         plugins.append(init_plugin(plugin_name))
 
