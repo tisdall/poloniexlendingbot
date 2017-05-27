@@ -10,7 +10,7 @@ plugins = []
 
 def init_plugin(plugin_name):
     """
-        :return: instance of requested class 
+        :return: instance of requested class
         :rtype: Plugin
         """
     klass = globals()[plugin_name]  # type: Plugin
