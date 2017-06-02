@@ -180,7 +180,7 @@ This feature group allows you to only lend a certain percentage of your total ho
     - If set to 0, same as if commented.
     - If disabled, will check if ``maxpercenttolend`` is enabled and use that if it is enabled.
     - Setting this overwrites ``maxpercenttolend``
-    - This is a global setting for the raw value of coin that will be lended if the coins lending value is under ``maxtolendrate``
+    - This is a global setting for the raw value of coin that will be lent if the coins lending value is under ``maxtolendrate``
     - Has no effect if current rate is higher than ``maxtolendrate``
     - If the remainder (after subtracting ``maxtolend``) in a coin's balance is less than ``minloansize``, then the remainder will be lent anyway. Otherwise, the coins would go to waste since you can't lend under ``minloansize``
 
@@ -190,7 +190,7 @@ This feature group allows you to only lend a certain percentage of your total ho
     - Allowed range: 0 (disabled) to 100 percent
     - If set to 0, same as if commented.
     - If disabled in addition to ``maxtolend``, entire feature will be disabled.
-    - This percentage is calculated per-coin, and is the percentage of the balance that will be lended if the coin's current rate is less than ``maxtolendrate``
+    - This percentage is calculated per-coin, and is the percentage of the balance that will be lent if the coin's current rate is less than ``maxtolendrate``
     - Has no effect if current rate is higher than ``maxtolendrate``
     - If the remainder (after subtracting ``maxpercenttolend``'s value) in a coin's balance is less than ``minloansize``, then the remainder will be lent anyway. Otherwise, the coins would go to waste since you can't lend under ``minloansize``
 
@@ -310,6 +310,26 @@ Advanced logging and Web Display
     - Default value: BTC
     - Acceptable values: BTC, USDT, Any coin with a direct Poloniex BTC trading pair (ex. DOGE, MAID, ETH), Currencies that have a BTC exchange rate on blockchain.info (i.e. EUR, USD)
     - Will be a close estimate, due to unexpected market fluctuations, trade fees, and other unforseeable factors.
+
+Plugins
+-------
+
+Plugins allow extending Bot functionality with extra features.
+To enable/disable a plugin add/remove it to the ``plugins`` list config option under the [BOT] section, example::
+
+    plugins = Plugin1, Plugin2, etc...
+
+AccountStats Plugin
+~~~~~~~~~~~~~~~~~~~
+
+The AccountStats plugin fetches all your loan history and provides statistics based on it.
+Current implementation sends a earnings summary Notification (see Notifications sections) every 24hr.
+
+To enable the plugin add ``AccountStats`` to the ``plugins`` config options, example::
+
+    plugins = AccountStats
+
+Be aware that first initialization might take longer as the bot will fetch all the history.
 
 lendingbot.html options
 -----------------------
