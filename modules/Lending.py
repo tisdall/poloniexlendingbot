@@ -34,9 +34,7 @@ coin_cfg_alerted = {}
 max_active_alerted = {}
 notify_conf = {}
 loans_provided = {}
-use_raw_gap = False
-raw_gap_bottom = 0
-raw_gap_top = 0
+gap_mode = ""
 
 # limit of orders to request
 loanOrdersRequestLimit = {}
@@ -55,20 +53,16 @@ def init(cfg, api1, log1, data, maxtolend, dry_run1, analysis, notify_conf1):
 
     global sleep_time, sleep_time_active, sleep_time_inactive, min_daily_rate, max_daily_rate, spread_lend, \
         gap_bottom, gap_top, xday_threshold, xdays, min_loan_size, end_date, coin_cfg, min_loan_sizes, dry_run, \
-        transferable_currencies, keep_stuck_orders, hide_coins, scheduler, use_raw_gap, raw_gap_bottom, raw_gap_top
+        transferable_currencies, keep_stuck_orders, hide_coins, scheduler, gap_mode
 
     sleep_time_active = float(Config.get("BOT", "sleeptimeactive", None, 1, 3600))
     sleep_time_inactive = float(Config.get("BOT", "sleeptimeinactive", None, 1, 3600))
     min_daily_rate = Decimal(Config.get("BOT", "mindailyrate", None, 0.003, 5)) / 100
     max_daily_rate = Decimal(Config.get("BOT", "maxdailyrate", None, 0.003, 5)) / 100
     spread_lend = int(Config.get("BOT", "spreadlend", None, 1, 20))
-    if Config.has_option("BOT", "rawgapbottom") and Config.has_option("BOT", "rawgaptop"):
-        use_raw_gap = True
-        raw_gap_bottom = Decimal(Config.get("BOT", "rawgapbottom", None, 0))
-        raw_gap_top = Decimal(Config.get("BOT", "rawgaptop", None, 0))
-    else:
-        gap_bottom = Decimal(Config.get("BOT", "gapbottom", None, 0))
-        gap_top = Decimal(Config.get("BOT", "gaptop", None, 0))
+    gap_mode = Config.get("BOT", "gapMode", "relative").lower()
+    gap_bottom = Decimal(Config.get("BOT", "gapbottom", None, 0))
+    gap_top = Decimal(Config.get("BOT", "gaptop", None, gap_bottom))
     xday_threshold = Decimal(Config.get("BOT", "xdaythreshold", None, 0.003, 5)) / 100
     xdays = str(Config.get("BOT", "xdays", None, 2, 60))
     min_loan_size = Decimal(Config.get("BOT", 'minloansize', None, 0.01))
@@ -220,7 +214,7 @@ def lend_all():
             MaxToLend.amount_to_lend(total_lended[cur], cur, 0, 0)
     usable_currencies = 0
     global sleep_time  # We need global var to edit sleeptime
-    if use_raw_gap:
+    if gap_mode == "rawbtc":
         ticker = api.return_ticker()  # Only call ticker once for all orders
     else:
         ticker = False
@@ -272,7 +266,7 @@ def get_gap_rate(active_cur, gap, order_book, cur_total_balance, raw=False):
     if raw:
         gap_expected = gap
     else:
-        gap_expected = gap * cur_total_balance / 100.0
+        gap_expected = gap * cur_total_balance / Decimal(100.0)
     gap_sum = 0
     i = -1
     while gap_sum < gap_expected:
@@ -297,20 +291,28 @@ def get_cur_spread(spread, cur_active_bal, active_cur):
 
 
 def construct_orders(cur, cur_active_bal, cur_total_balance, ticker):
+    global gap_mode, gap_bottom, gap_top  # To be able to change them later if needed.
     cur_spread = get_cur_spread(spread_lend, cur_active_bal, cur)
     order_book = construct_order_book(cur)
-    if use_raw_gap:
+    if gap_mode == "rawbtc":
         btc_value = 1
         if cur != 'BTC':
             for coin in ticker:
                 if coin == 'BTC_' + str(cur).upper():
                     btc_value = Decimal(ticker[coin]['last'])
                     break
-        bottom_depth = raw_gap_bottom / btc_value  # Converts from BTC to altcoin's value
+        bottom_depth = gap_bottom / btc_value  # Converts from BTC to altcoin's value
         bottom_rate = get_gap_rate(cur, bottom_depth, order_book, cur_total_balance, True)
-        top_depth = raw_gap_top / btc_value
+        top_depth = gap_bottom / btc_value
         top_rate = get_gap_rate(cur, top_depth, order_book, cur_total_balance, True)
+    elif gap_mode == "relative":
+        bottom_rate = get_gap_rate(cur, gap_bottom, order_book, cur_total_balance)
+        top_rate = get_gap_rate(cur, gap_top, order_book, cur_total_balance)
     else:
+        print "Invalid setting for gapMode, using defaults..."
+        gap_mode = "relative"
+        gap_bottom = 10
+        gap_top = 200
         bottom_rate = get_gap_rate(cur, gap_bottom, order_book, cur_total_balance)
         top_rate = get_gap_rate(cur, gap_top, order_book, cur_total_balance)
 
@@ -372,7 +374,7 @@ def lend_cur(active_cur, total_lended, lending_balances, ticker):
         below_min = Decimal(orders['rates'][i]) < Decimal(cur_min_daily_rate)
 
         if hide_coins and below_min:
-            log.log("Not lending {:s} due to rate below {:.4f}%".format(active_cur,(cur_min_daily_rate * 100)))
+            log.log("Not lending {:s} due to rate below {:.4f}%".format(active_cur, (cur_min_daily_rate * 100)))
             return 0
         elif below_min:
             rate = str(cur_min_daily_rate)
@@ -408,4 +410,5 @@ def transfer_balances():
                 log.log(log.digestApiMsg(msg))
                 log.notify(log.digestApiMsg(msg), notify_conf)
             if coin not in exchange_balances:
-                print "ERROR: Incorrect coin entered for transferCurrencies: " + coin
+                print "WARN: Incorrect coin entered for transferCurrencies: " + coin
+                transferable_currencies.remove(coin)
